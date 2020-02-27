@@ -1,6 +1,15 @@
 <template>
-  <div id="hy-swiper">
-    <slot></slot>
+  <div>
+    <div id="hy-swiper">
+      <slot></slot>
+      <div class="dot-list">
+        <span v-for="(item,index) in names" :class="active" @click="todo(index)"></span>
+      </div>
+    </div>
+    <div class="btn-list">
+      <button @click="todo(active-1)"><b><</b></button>
+      <button @click="todo(active+1)"><b>></b></button>
+    </div>
 <!--    <div class="swiper" @touchstart="touchStart" @touchmove="touchMove"-->
 <!--    @touchend="touchEnd">-->
 <!--      <slot></slot>-->
@@ -22,7 +31,7 @@
       // values = selected in father module
       value:{
         type:String,
-        default:"",
+        default:'',
       }
     },
     data(){
@@ -30,32 +39,50 @@
         names:[],
         itemlen:0,
         curSelected:'',
+        prePosition:0,
       }
     },
     mounted() {
-      this.names = this.$children.map(children => children.name);
+      this.names = this.$children.map(children => children.name)
       this.itemlen = this.names.length;
-      console.log(this.names+" "+this.itemlen);
+      console.log(this.names);
       this.showChildren();
       this.run();
+      // initiate
+      this.prePosition = this.active
     },
     methods:{
       showChildren(){
-        this.curSelected = this.value || this.name[1];
-        console.log(this.curSelected);
+        this.curSelected = this.value || this.name[0];
         this.$children.forEach(vm => {
-          vm.selected = this.curSelected;
+          this.$nextTick(() => {
+            vm.selected = this.curSelected;
+          });
+          // in this situation, user clicked '<' button which change 'active-1'
+          // but after emit, prePosition was attached this.active. So, after emit, this.active
+          // become to the value equal with 'active-1'. Of course that active>active-1, so it's false.
+          vm.reverse = this.prePosition < this.active? true:false;
+          // judge edge
+          if(this.prePosition === 0 && this.active === this.itemlen-1){
+            vm.reverse = false;
+          };
+          if(this.prePosition === this.itemlen-1 && this.active === 0){
+            vm.reverse = true;
+          }
         })
       },
-      selected(next){
-        this.$emit('input',this.names[next])
+      todo(nextItem){
+        if(nextItem>this.itemlen-1) nextItem = 0;
+        if(nextItem<0) nextItem = this.itemlen-1;
+        this.prePosition = this.active;
+        this.$emit('input', this.names[nextItem]);
       },
       run(){
         setInterval(() => {
           const index = this.active;
-          const nextIndex = (index+1>this.itemlen-1? 0:index+1);
-          this.selected(nextIndex);
-        }, 3000)
+          const nextItem = (index+1>this.itemlen-1? 0:index+1);
+          this.todo(nextItem)
+        },10000)
       }
     },
     // spy/monitor
@@ -66,7 +93,7 @@
     },
     computed:{
       active(){
-        return this.names.indexOf(this.curSelected);
+        return this.names.indexOf(this.curSelected)
       }
     }
 
@@ -245,11 +272,31 @@
 </script>
 
 <style scoped>
-  #hy-swiper{
+  #hy-swiper {
     overflow: hidden;
     position: relative;
     height: 150px;
     width: 100%;
+    text-align: center;
+  }
+
+  .btn-list {
+    position: absolute;
+  }
+
+  .dot-list {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+  }
+
+  .dot-list span{
+    width: 20px;
+    height: 4px;
+    background: skyblue;
+    display: inline-block;
+    margin-right: 5px;
+    cursor: pointer;
   }
 
   .swiper {

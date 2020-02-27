@@ -31,7 +31,7 @@
       return{
         banners:[],
         recommends:[],
-        selected:'item1',
+        selected:'item1'
       }
     },
     created(){
