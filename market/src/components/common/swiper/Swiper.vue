@@ -3,7 +3,7 @@
     <div id="hy-swiper">
       <slot></slot>
       <div class="dot-list">
-        <span v-for="(item,index) in names" :class="active" @click="todo(index)"></span>
+        <span v-for="(item,index) in names" :class="{active: active === index}" @click="todo(index)"></span>
       </div>
     </div>
     <div class="btn-list">
@@ -297,6 +297,11 @@
     display: inline-block;
     margin-right: 5px;
     cursor: pointer;
+    opacity: 0.5;
+  }
+
+  .dot-list span.active{
+    opacity: 1;
   }
 
   .swiper {
