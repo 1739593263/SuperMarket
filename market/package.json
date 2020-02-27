@@ -10,8 +10,12 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "axios": "^0.19.2",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
     "vue": "^2.5.2",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "webpack-node-externals": "^1.7.2"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

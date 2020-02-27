@@ -1,23 +1,48 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
+    <main-tab-bar/>
     <router-view/>
+    <h1>{{message}}</h1>
+    <button @click="request">request</button>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'App'
-}
-</script>
+  import mainTabBar from './components/content/mainTabber/mainTabBar'
+  import {testApi} from '@/api/testApi'
 
+  export default {
+    name: 'App',
+    data(){
+      return{
+        message:"hello",
+      }
+    },
+    components:{
+      mainTabBar,
+      testApi,
+    },
+    methods:{
+      request(){
+        console.log("lalala");
+        testApi().then(res => {
+          console.log(res);
+        }).catch(err => {
+          console.log(err);
+        });
+        // testApi({
+        //   url:'test/data',
+        // }).then(res => {
+        //   console.log(res);
+        // }).catch(err => {
+        //   console.log(err);
+        // });
+      }
+    }
+  };
+
+</script>
+<!--after define alias in vue.config.js, import address can drop './'-->
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  @import "assets/css/base.css";
 </style>

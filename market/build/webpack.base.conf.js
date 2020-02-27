@@ -8,10 +8,12 @@ function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
 
-
+// const nodeExternals = require('webpack-node-externals');
 
 module.exports = {
   context: path.resolve(__dirname, '../'),
+  // target: 'node',
+  // externals: [nodeExternals()],
   entry: {
     app: './src/main.js'
   },
