@@ -1,15 +1,13 @@
 <template>
   <div>
-    <div id="hy-swiper">
+    <div id="hy-swiper" @mouseenter="mouseenter" @mouseleave="mouseleave">
       <slot></slot>
       <div class="dot-list">
-        <span v-for="(item,index) in names" :class="{active: active === index}" @click="todo(index)"></span>
+        <span v-for="(item,num) in names" :class="{active: active === num}" @click="todo(num)"></span>
       </div>
     </div>
-    <div class="btn-list">
-      <button @click="todo(active-1)"><b><</b></button>
-      <button @click="todo(active+1)"><b>></b></button>
-    </div>
+<!--    <button @click="todo(active-1)" class="lbtn"><b><</b></button>-->
+<!--    <button @click="todo(active+1)" class="rbtn"><b>></b></button>-->
 <!--    <div class="swiper" @touchstart="touchStart" @touchmove="touchMove"-->
 <!--    @touchend="touchEnd">-->
 <!--      <slot></slot>-->
@@ -26,13 +24,18 @@
 </template>
 
 <script>
+  import {swiperApi} from '@/api/resourceApi'
+
   export default {
     props:{
-      // values = selected in father module
       value:{
         type:String,
         default:'',
-      }
+      },
+      autoplay:{
+        type:Boolean,
+        default: false,
+      },
     },
     data(){
       return{
@@ -40,10 +43,13 @@
         itemlen:0,
         curSelected:'',
         prePosition:0,
+        timer:'',
       }
     },
     mounted() {
-      this.names = this.$children.map(children => children.name)
+      this.names = this.$children.map(children => children.name);
+      // console.log("name1="+this.names);
+
       this.itemlen = this.names.length;
       console.log(this.names);
       this.showChildren();
@@ -51,9 +57,21 @@
       // initiate
       this.prePosition = this.active
     },
+
+
     methods:{
+      mouseenter(){
+        console.log("enter");
+        clearInterval(this.timer);
+      },
+      mouseleave(){
+        console.log("leave");
+        if(!this.timer){
+          this.run();
+        }
+      },
       showChildren(){
-        this.curSelected = this.value || this.name[0];
+        this.curSelected = this.value || this.names[0];
         this.$children.forEach(vm => {
           this.$nextTick(() => {
             vm.selected = this.curSelected;
@@ -78,12 +96,14 @@
         this.$emit('input', this.names[nextItem]);
       },
       run(){
-        setInterval(() => {
-          const index = this.active;
-          const nextItem = (index+1>this.itemlen-1? 0:index+1);
-          this.todo(nextItem)
-        },10000)
-      }
+        if(this.autoplay){
+          this.timer = setInterval(() => {
+            const index = this.active;
+            const nextItem = (index+1>this.itemlen-1? 0:index+1);
+            this.todo(nextItem)
+          },3000)
+        }
+      },
     },
     // spy/monitor
     watch:{
@@ -94,7 +114,7 @@
     computed:{
       active(){
         return this.names.indexOf(this.curSelected)
-      }
+      },
     }
 
     // name: "Swiper",
@@ -275,13 +295,27 @@
   #hy-swiper {
     overflow: hidden;
     position: relative;
-    height: 150px;
+    height: 200px;
     width: 100%;
     text-align: center;
+
   }
 
-  .btn-list {
+  #hy-swiper img{
+    height: 200px;
+    width: 100%;
+  }
+
+  hy-swiper button{
     position: absolute;
+  }
+
+  #lbtn {
+    float: left;
+  }
+
+  #rbtn {
+    float: right;
   }
 
   .dot-list {

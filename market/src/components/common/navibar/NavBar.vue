@@ -17,6 +17,12 @@
     display: flex;
     line-height: 44px;
     text-align: center;
+
+    z-index: 8;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
   }
 
   .left .right {
