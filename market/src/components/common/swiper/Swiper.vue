@@ -36,9 +36,14 @@
         type:Boolean,
         default: false,
       },
+      banners:{
+        type:Array,
+        default:'',
+      }
     },
     data(){
       return{
+        // save:[],
         names:[],
         itemlen:0,
         curSelected:'',
@@ -48,10 +53,20 @@
     },
     mounted() {
       this.names = this.$children.map(children => children.name);
+
+      // console.log(this.banners);
+      // if(this.names.length === 0){
+      //   for(let i of this.banners){
+      //     // this.names[i] = 'item'+i;
+      //     console.log("n="+i);
+      //     console.log("h");
+      //   }
+      //   console.log("names1:"+this.names[0]);
+      // }
       // console.log("name1="+this.names);
 
       this.itemlen = this.names.length;
-      console.log(this.names);
+      // console.log(this.names);
       this.showChildren();
       this.run();
       // initiate
@@ -298,6 +313,8 @@
     height: 200px;
     width: 100%;
     text-align: center;
+
+    overflow-x: scroll;
 
   }
 

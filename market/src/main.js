@@ -4,7 +4,8 @@ import router from './router'
 import axios from 'axios'
 // import express from 'express'
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
+Vue.prototype.$bus = new Vue();
 
 /* eslint-disable no-new */
 new Vue({

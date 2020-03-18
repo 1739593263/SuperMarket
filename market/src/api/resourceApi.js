@@ -5,3 +5,19 @@ export function swiperApi(config) {
     url: "/resources/swiper",
   })
 }
+
+export function controltab(type,page){
+  return request({
+    url:"/resources/tabItem",
+    params:{
+      type,
+      page
+    }
+  })
+}
+
+export function animalRes(){
+  return request({
+    url:"/resources/animals",
+  })
+}

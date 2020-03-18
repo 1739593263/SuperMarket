@@ -1,6 +1,6 @@
 <template>
   <div id="mSwiper">
-    <swiper v-model="selected" autoplay>
+    <swiper v-model="selected" autoplay :banners="banners">
       <swiper-item v-for="(item,index) in banners" :name="item.name" :key="index">
         <img :src="item.image" alt="">
       </swiper-item>
@@ -35,7 +35,7 @@
     },
     data(){
       return{
-        selected:'item1'
+        selected:'item1',
       }
     },
     methods:{
@@ -43,7 +43,6 @@
         return "item"+index
       }
     },
-
     components:{
       Swiper,
       SwiperItem,

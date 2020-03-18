@@ -16,16 +16,19 @@
       titles:{
         type:Array,
         default:[],
-      }
+      },
     },
     data(){
       return{
-        curIndex:0
+        curIndex:0,
+        click:'herbivore'
       }
     },
     methods:{
       actclick(index){
         this.curIndex = index;
+        this.click = this.titles[index];
+        this.$emit('tabclick',this.click);
       }
     }
   }
@@ -42,6 +45,7 @@
     position: sticky;
     top: 44px;
     background-color: #fff;
+    z-index: 8;
   }
   .tab-item {
     flex: 1;
